@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter and Countdown Timer App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Counter App</h1>
+        <div id="counterDisplay">Counter: 0</div>
+        <button onclick="incrementCounter()">Increment Counter</button>
+        <button onclick="resetCounter()">Reset Counter</button>
+    </div>
+
+    <div class="container">
+        <h1>Countdown Timer</h1>
+        <div id="timerDisplay">Time Left: 0 seconds</div>
+        <button onclick="startCountdown(10)">Start Countdown (10s)</button>
+        <button onclick="stopCountdown()">Stop Countdown</button>
+    </div>
+
+    <script>
+    
+        let globalCounter = 0;
+
+        
+        function createCounter() {
+            
+            let count = 0;
+
+            return {
+                increment: function() {
+                    count++;  
+                    document.getElementById('counterDisplay').innerText = "Counter: " + count;
+                },
+                reset: function() {
+                    count = 0;  
+                    document.getElementById('counterDisplay').innerText = "Counter: " + count;
+                }
+            };
+        }
+
+        
+        const counter = createCounter();
+
+        
+        function incrementCounter() {
+            globalCounter++;  
+            counter.increment();
+        }
+
+        function resetCounter() {
+            globalCounter = 0;  
+            counter.reset();
+        }
+
+    
+        function createCountdownTimer() {
+            let timerId; 
+            let timeLeft; 
+
+            function start(time) {
+                
+                timeLeft = time;
+                document.getElementById('timerDisplay').innerText = "Time Left: " + timeLeft + " seconds";
+
+                
+                if (timerId) clearInterval(timerId);
+
+                
+                timerId = setInterval(() => {
+                    timeLeft--;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timerId);  
+                        document.getElementById('timerDisplay').innerText = "Time's up!";
+                    } else {
+                        document.getElementById('timerDisplay').innerText = "Time Left: " + timeLeft + " seconds";
+                    }
+                }, 1000);
+            }
+
+            function stop() {
+                clearInterval(timerId);  
+                document.getElementById('timerDisplay').innerText = "Countdown Stopped!";
+                
+            }
+
+            
+            return {
+                start,
+                stop
+            };
+        }
+
+        
+        const countdownTimer = createCountdownTimer();
+
+        
+        function startCountdown(seconds) {
+            countdownTimer.start(seconds);
+        }
+
+        function stopCountdown() {
+            countdownTimer.stop();
+        }
+    </script>
+</body>
+</html>
